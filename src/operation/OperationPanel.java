@@ -126,6 +126,7 @@ public class OperationPanel extends JPanel implements ActionListener {
             input.addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyPressed(KeyEvent e) {
+                    System.out.println(playerX);
                     switch (e.getKeyCode()) {
                         case KeyEvent.VK_LEFT:
                             label.setText("Left");
@@ -138,8 +139,8 @@ public class OperationPanel extends JPanel implements ActionListener {
 
                         case KeyEvent.VK_RIGHT:
                             label.setText("Right");
-                            if (playerX >= height - (3 * unit))
-                                playerX = height - (2 * unit);
+                            if (playerX >= 650)
+                                playerX = 675;
                             else
                                 moveRight();
                             break;
