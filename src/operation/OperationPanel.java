@@ -44,12 +44,12 @@ public class OperationPanel extends JPanel implements ActionListener {
 
     protected void drawPlayer(Graphics g) {
         g.setColor(Color.GREEN);
-        g.fillRect(14 * unit, height - unit, 150, unit);
+        g.fillRect(playerX, height - unit, 150, unit);
     }
 
     protected void drawBall(Graphics g) {
         g.setColor(Color.WHITE);
-        g.fillOval(14 * unit, (height - (2 * unit)), unit, unit);
+        g.fillOval(ballX, (height - (2 * unit)), unit, unit);
     }
 
     @Override
