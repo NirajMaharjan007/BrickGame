@@ -13,8 +13,8 @@ public class OperationPanel extends JPanel implements ActionListener {
 
     private int totalBrick = 20,
             playerX,
-            ballX, ballY,
-            ballXDir, ballYDir;
+            ballX = 8 * unit, ballY = 6 * unit,
+            ballXDir = -1, ballYDir = -2;
 
     private Timer timer;
 
@@ -24,29 +24,26 @@ public class OperationPanel extends JPanel implements ActionListener {
         setPreferredSize(new Dimension(width, height));
         setVisible(true);
         setFocusable(true);
-        start();
         new Controller();
         setBackground(Color.BLACK);
+        start();
     }
 
     protected void start() {
-        play = true;
-        timer = new Timer(80, this);
+        // play = true;
+        timer = new Timer(8, this);
         timer.start();
-    }
-
-    protected void checkCollision() {
-        if (playerX < 0)
-            playerX = 0;
-
-        if (playerX > width - unit)
-            playerX = width - unit;
-
     }
 
     protected void moveBall() {
         ballX += ballXDir;
         ballY += ballYDir;
+
+        if (new Rectangle(ballX, ballY, unit, unit)
+                .intersects(new Rectangle(playerX, height - (2 * unit), (5 * unit), unit))) {
+            ballYDir = -ballYDir;
+        }
+
         if (ballX < 0) {
             ballXDir = -ballXDir;
         }
@@ -54,26 +51,30 @@ public class OperationPanel extends JPanel implements ActionListener {
         if (ballY < 0) {
             ballYDir = -ballYDir;
         }
+
+        if (ballX > (width - unit)) {
+            ballXDir = -ballXDir;
+        }
     }
 
     @Override
     public void paint(Graphics g) {
         super.paintComponent(g);
         g.setColor(new Color(230, 230, 230));
-        for (int i = 0; i < height; i++) {
-            g.drawLine(i * unit, 0, i * unit, height);
-            g.drawLine(0, i * unit, width, i * unit);
-        }
+        // for (int i = 0; i < height; i++) {
+        // g.drawLine(i * unit, 0, i * unit, height);
+        // g.drawLine(0, i * unit, width, i * unit);
+        // }
 
         drawPlayer(g);
         drawBall(g);
+
         g.dispose();
     }
 
     protected void drawPlayer(Graphics g) {
         g.setColor(Color.GREEN);
-        g.fillRect(playerX, height - unit, 150, 20);
-        checkCollision();
+        g.fillRect(playerX, height - (2 * unit), (5 * unit), unit);
     }
 
     protected void drawBall(Graphics g) {
@@ -94,11 +95,22 @@ public class OperationPanel extends JPanel implements ActionListener {
         TextField input = new TextField(8);
         JLabel label = new JLabel("", JLabel.CENTER);
 
+        protected void moveLeft() {
+            play = true;
+            playerX -= unit;
+        }
+
+        protected void moveRight() {
+            play = true;
+            playerX += unit;
+        }
+
         Controller() {
             setVisible(true);
             setLocation(100, 150);
             setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setResizable(false);
 
             input.setEditable(false);
 
@@ -117,14 +129,19 @@ public class OperationPanel extends JPanel implements ActionListener {
                     switch (e.getKeyCode()) {
                         case KeyEvent.VK_LEFT:
                             label.setText("Left");
-                            playerX -= unit;
-                            repaint();
+                            if (playerX <= 0)
+                                playerX = 0;
+                            else
+                                moveLeft();
+
                             break;
 
                         case KeyEvent.VK_RIGHT:
                             label.setText("Right");
-                            playerX += unit;
-                            repaint();
+                            if (playerX >= height - (3 * unit))
+                                playerX = height - (2 * unit);
+                            else
+                                moveRight();
                             break;
                     }
                 }
