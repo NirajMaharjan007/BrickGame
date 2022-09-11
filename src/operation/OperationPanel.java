@@ -6,17 +6,21 @@ import javax.swing.*;
 
 public class OperationPanel extends JPanel implements ActionListener {
     private final int width = 800, height = 600;
-    private final int unit = 25;
+    private static final int unit = 25;
 
     protected boolean play = false;
     private int score = 0;
 
-    private int totalBrick = 20,
-            playerX,
-            ballX = 8 * unit, ballY = 6 * unit,
-            ballXDir = -1, ballYDir = -2;
+    private int totalBrick = 20, playerX;
+
+    public static int ballX = 8 * unit,
+            ballY = 6 * unit,
+            ballXDir = -1,
+            ballYDir = -2;
 
     private Timer timer;
+
+    Obstacle ob = new Obstacle(width, height);
 
     public OperationPanel() {
         setFocusTraversalKeysEnabled(false);
@@ -31,6 +35,7 @@ public class OperationPanel extends JPanel implements ActionListener {
 
     protected void start() {
         // play = true;
+        ob.setObstacle();
         timer = new Timer(8, this);
         timer.start();
     }
@@ -55,6 +60,8 @@ public class OperationPanel extends JPanel implements ActionListener {
         if (ballX > (width - unit)) {
             ballXDir = -ballXDir;
         }
+
+        // ob.isTouched();
     }
 
     @Override
@@ -68,6 +75,8 @@ public class OperationPanel extends JPanel implements ActionListener {
 
         drawPlayer(g);
         drawBall(g);
+
+        ob.drawObstacle(g);
 
         g.dispose();
     }
