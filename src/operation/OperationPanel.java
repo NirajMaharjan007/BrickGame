@@ -9,9 +9,11 @@ public class OperationPanel extends JPanel implements ActionListener {
     private static final int unit = 25;
 
     protected boolean play = false;
-    private int score = 0;
+    // private int score = 0;
 
-    private int totalBrick = 20, playerX;
+    // private int totalBrick = 20;
+
+    public static int playerX;
 
     public static int ballX = 8 * unit,
             ballY = 6 * unit,
@@ -34,8 +36,8 @@ public class OperationPanel extends JPanel implements ActionListener {
     }
 
     protected void start() {
-        // play = true;
         ob.setObstacle();
+        play = true;
         timer = new Timer(8, this);
         timer.start();
     }
@@ -43,6 +45,8 @@ public class OperationPanel extends JPanel implements ActionListener {
     protected void moveBall() {
         ballX += ballXDir;
         ballY += ballYDir;
+
+        System.out.println("Ball X: " + ballX + ", Ball Y: " + ballY);
 
         if (new Rectangle(ballX, ballY, unit, unit)
                 .intersects(new Rectangle(playerX, height - (2 * unit), (5 * unit), unit))) {
@@ -61,7 +65,10 @@ public class OperationPanel extends JPanel implements ActionListener {
             ballXDir = -ballXDir;
         }
 
-        // ob.isTouched();
+        if (ballY > height)
+            play = false;
+
+        ob.isTouched();
     }
 
     @Override
@@ -73,10 +80,14 @@ public class OperationPanel extends JPanel implements ActionListener {
         // g.drawLine(0, i * unit, width, i * unit);
         // }
 
-        drawPlayer(g);
-        drawBall(g);
+        if (play) {
+            drawPlayer(g);
+            drawBall(g);
 
-        ob.drawObstacle(g);
+            ob.drawObstacle(g);
+        } else {
+            gameOver(g);
+        }
 
         g.dispose();
     }
@@ -89,6 +100,13 @@ public class OperationPanel extends JPanel implements ActionListener {
     protected void drawBall(Graphics g) {
         g.setColor(Color.WHITE);
         g.fillOval(ballX, ballY, unit, unit);
+    }
+
+    protected void gameOver(Graphics g) {
+        g.setColor(Color.RED);
+        g.setFont(new Font("Times New Roman", Font.BOLD, 30));
+
+        g.drawString("Game Over", 300, height / 2);
     }
 
     @Override
@@ -135,7 +153,7 @@ public class OperationPanel extends JPanel implements ActionListener {
             input.addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyPressed(KeyEvent e) {
-                    System.out.println(playerX);
+                    // System.out.println(playerX);
                     switch (e.getKeyCode()) {
                         case KeyEvent.VK_LEFT:
                             label.setText("Left");

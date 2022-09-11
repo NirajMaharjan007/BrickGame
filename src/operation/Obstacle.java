@@ -18,21 +18,20 @@ public class Obstacle {
 
     public void drawObstacle(Graphics g) {
         g.setColor(Color.RED);
-        g.fillRect(x, y, 35, 35);
+        g.fillRect(x, y, 80, 25);
     }
 
     public void setObstacle() {
         Random random = new Random();
         x = random.nextInt(screen_width / 35) * 35;
-        y = random.nextInt(screen_height / 35) * 35;
+        y = random.nextInt(0, 5) * 35;
     }
 
     public void isTouched() {
-        if (OperationPanel.ballX == x)
-            OperationPanel.ballXDir = -OperationPanel.ballXDir;
-
-        if (OperationPanel.ballY == y)
+        if (new Rectangle(OperationPanel.ballX, OperationPanel.ballY, 25, 25)
+                .intersects(new Rectangle(x, y, 80, 25))) {
             OperationPanel.ballYDir = -OperationPanel.ballYDir;
+        }
     }
 
 }
