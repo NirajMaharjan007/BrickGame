@@ -82,6 +82,10 @@ public class OperationPanel extends JPanel implements ActionListener {
         g.fillOval(ballX, ballY, unit, unit);
     }
 
+    protected void drawBrick(Graphics g) {
+
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         timer.start();
