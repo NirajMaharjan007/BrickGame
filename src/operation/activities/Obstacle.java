@@ -2,12 +2,10 @@ package operation.activities;
 
 import java.awt.*;
 import java.util.Random;
-import java.awt.event.*;
 
-public class Obstacle implements ActionListener {
+public class Obstacle {
     private int x, y;
     private int screen_width, screen_height;
-    private boolean play = false;
 
     public Obstacle() {
     }
@@ -38,30 +36,5 @@ public class Obstacle implements ActionListener {
                 .intersects(new Rectangle(x, y, 80, 20))) {
             OperationPanel.ballYDir = -OperationPanel.ballYDir;
         }
-    }
-
-    public void moveObstacle() {
-        int unit = 25;
-
-        x += unit;
-
-        if (x < 0)
-            x += unit;
-
-        if (x > screen_height - unit)
-            x -= unit;
-
-    }
-
-    public void start(boolean flag) {
-        this.play = flag;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (play) {
-            moveObstacle();
-        }
-
     }
 }

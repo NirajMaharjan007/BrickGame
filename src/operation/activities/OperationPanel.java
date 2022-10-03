@@ -34,7 +34,6 @@ public class OperationPanel extends JPanel implements ActionListener {
     protected void start() {
         play = true;
         ob.setObstacle();
-        ob.start(play);
         timer.setRepeats(true);
         timer.start();
     }
@@ -71,11 +70,6 @@ public class OperationPanel extends JPanel implements ActionListener {
         super.paintComponent(g);
         g.setColor(new Color(230, 230, 230));
 
-        // for (int i = 0; i < height; i++) {
-        // g.drawLine(i * unit, 0, i * unit, height);
-        // g.drawLine(0, i * unit, width, i * unit);
-        // }
-
         if (play) {
             drawPlayer(g);
             drawBall(g);
@@ -109,7 +103,6 @@ public class OperationPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (play) {
             moveBall();
-            ob.moveObstacle();
         }
         repaint();
     }
@@ -154,7 +147,6 @@ public class OperationPanel extends JPanel implements ActionListener {
             input.addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyPressed(KeyEvent e) {
-                    // System.out.println(playerX);
                     switch (e.getKeyCode()) {
                         case KeyEvent.VK_SPACE:
                             reset();
