@@ -1,8 +1,13 @@
 # BrickGame
 From Java and made by me.
 
-NOT Finished quietly made
+## Summary
+Brick Breaker make from Java using VS code.
 
-**This Java Brick Game is not finished**
+## Problem
+- Has bugs when colliding a paddle or obstacle paddle
+- After winning no reset
 
-*Not good*
+## Resolved 
+- Work like charm
+- Playable
