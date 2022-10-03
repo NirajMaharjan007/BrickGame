@@ -24,17 +24,17 @@ public class OperationPanel extends JPanel implements ActionListener {
     public OperationPanel() {
         start();
         setFocusTraversalKeysEnabled(false);
-        // setLayout(new FlowLayout(FlowLayout.CENTER));
         setPreferredSize(new Dimension(width, height));
         setVisible(true);
         setFocusable(true);
-        new Controller();
         setBackground(Color.BLACK);
+        new Controller();
     }
 
     protected void start() {
-        ob.setObstacle();
         play = true;
+        ob.setObstacle();
+        ob.start(play);
         timer.setRepeats(true);
         timer.start();
     }
@@ -109,6 +109,7 @@ public class OperationPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (play) {
             moveBall();
+            ob.moveObstacle();
         }
         repaint();
     }
