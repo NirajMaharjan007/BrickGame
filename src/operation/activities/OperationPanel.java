@@ -1,4 +1,4 @@
-package operation;
+package operation.activities;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -9,36 +9,33 @@ public class OperationPanel extends JPanel implements ActionListener {
     private static final int unit = 25;
 
     protected boolean play = false;
-    // private int score = 0;
-
-    // private int totalBrick = 20;
 
     public static int playerX;
 
-    public static int ballX = 8 * unit,
+    public static int ballX = 5 * unit,
             ballY = 6 * unit,
             ballXDir = -1,
             ballYDir = -2;
 
-    private Timer timer;
+    Timer timer = new Timer(1, this);
 
     Obstacle ob = new Obstacle(width, height);
 
     public OperationPanel() {
+        start();
         setFocusTraversalKeysEnabled(false);
-        setLayout(new FlowLayout(FlowLayout.CENTER));
+        // setLayout(new FlowLayout(FlowLayout.CENTER));
         setPreferredSize(new Dimension(width, height));
         setVisible(true);
         setFocusable(true);
         new Controller();
         setBackground(Color.BLACK);
-        start();
     }
 
     protected void start() {
         ob.setObstacle();
         play = true;
-        timer = new Timer(8, this);
+        timer.setRepeats(true);
         timer.start();
     }
 
@@ -48,22 +45,20 @@ public class OperationPanel extends JPanel implements ActionListener {
 
         System.out.println("Ball X: " + ballX + ", Ball Y: " + ballY);
 
-        if (new Rectangle(ballX, ballY, unit, unit)
-                .intersects(new Rectangle(playerX, height - (2 * unit), (5 * unit), unit))) {
+        Rectangle player = new Rectangle(ballX, ballY, unit, unit);
+        Rectangle ball = new Rectangle(playerX, height - (2 * unit), (5 * unit), (5 * unit));
+
+        if (player.intersects(ball) && ball.intersects(player))
             ballYDir = -ballYDir;
-        }
 
-        if (ballX < 0) {
+        if (ballX < 0)
             ballXDir = -ballXDir;
-        }
 
-        if (ballY < 0) {
+        if (ballY < 0)
             ballYDir = -ballYDir;
-        }
 
-        if (ballX > (width - unit)) {
+        if (ballX > (width - unit))
             ballXDir = -ballXDir;
-        }
 
         if (ballY > height)
             play = false;
@@ -75,6 +70,7 @@ public class OperationPanel extends JPanel implements ActionListener {
     public void paint(Graphics g) {
         super.paintComponent(g);
         g.setColor(new Color(230, 230, 230));
+
         // for (int i = 0; i < height; i++) {
         // g.drawLine(i * unit, 0, i * unit, height);
         // g.drawLine(0, i * unit, width, i * unit);
@@ -111,11 +107,15 @@ public class OperationPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        timer.start();
         if (play) {
             moveBall();
         }
         repaint();
+    }
+
+    private void reset() {
+        ballX = playerX + (2 * unit);
+        ballY = height - (4 * unit);
     }
 
     private class Controller extends JFrame {
@@ -155,6 +155,11 @@ public class OperationPanel extends JPanel implements ActionListener {
                 public void keyPressed(KeyEvent e) {
                     // System.out.println(playerX);
                     switch (e.getKeyCode()) {
+                        case KeyEvent.VK_SPACE:
+                            reset();
+                            play = true;
+                            break;
+
                         case KeyEvent.VK_LEFT:
                             label.setText("Left");
                             if (playerX <= 0)

@@ -1,4 +1,4 @@
-package operation;
+package operation.activities;
 
 import java.awt.*;
 import java.util.Random;
