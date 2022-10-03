@@ -151,6 +151,8 @@ public class OperationPanel extends JPanel implements ActionListener {
     private void reset() {
         ballX = playerX + (2 * unit);
         ballY = height - (4 * unit);
+        total_bricks = 21;
+        ob.setObstacle();
     }
 
     private class Controller extends JFrame {
