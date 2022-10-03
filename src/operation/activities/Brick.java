@@ -16,7 +16,7 @@ public class Brick {
         }
 
         brick_width = 300 / row;
-        brick_height = 300 / column;
+        brick_height = 250 / column;
     }
 
     public void draw(Graphics2D g) {

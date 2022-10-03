@@ -12,17 +12,23 @@ public class OperationPanel extends JPanel implements ActionListener {
 
     public static int playerX;
 
-    public static int ballX = 5 * unit,
-            ballY = 6 * unit,
+    public static int ballX = 2 * unit,
+            ballY = 10 * unit,
             ballXDir = -1,
             ballYDir = -2;
+
+    private int total_bricks = 21;
 
     Timer timer = new Timer(1, this);
 
     Obstacle ob = new Obstacle(width, height);
 
+    Brick brick;
+
     public OperationPanel() {
+        System.out.println("Total Brick: " + total_bricks);
         start();
+        brick = new Brick(3, 7);
         setFocusTraversalKeysEnabled(false);
         setPreferredSize(new Dimension(width, height));
         setVisible(true);
@@ -36,6 +42,31 @@ public class OperationPanel extends JPanel implements ActionListener {
         ob.setObstacle();
         timer.setRepeats(true);
         timer.start();
+    }
+
+    private void brickCollision() {
+        for (int i = 0; i < brick.map.length; i++) {
+            for (int j = 0; j < brick.map[0].length; j++) {
+                int brickX = j * brick.brick_width + 50;
+                int brickY = i * brick.brick_height + 50;
+                int brickWidth = brick.brick_width;
+                int brickHeight = brick.brick_height;
+
+                Rectangle rect = new Rectangle(brickX, brickY, brickWidth, brickHeight);
+                Rectangle ball_rect = new Rectangle(ballX, ballY, unit, unit);
+                if (brick.map[i][j] > 0) {
+                    if (rect.intersects(ball_rect)) {
+                        brick.setBrickValue(0, i, j);
+                        total_bricks--;
+
+                        if (ballX + 20 < rect.x || ballX + 1 >= rect.x + rect.width)
+                            ballXDir = -ballXDir;
+                        else
+                            ballYDir = -ballYDir;
+                    }
+                }
+            }
+        }
     }
 
     protected void moveBall() {
@@ -68,18 +99,19 @@ public class OperationPanel extends JPanel implements ActionListener {
     @Override
     public void paint(Graphics g) {
         super.paintComponent(g);
-        g.setColor(new Color(230, 230, 230));
-
         if (play) {
+            brick.draw((Graphics2D) g);
             drawPlayer(g);
             drawBall(g);
 
             ob.drawObstacle(g);
+
+            if (total_bricks == 0)
+                gameWin(g);
+
         } else {
             gameOver(g);
         }
-
-        g.dispose();
     }
 
     protected void drawPlayer(Graphics g) {
@@ -92,7 +124,15 @@ public class OperationPanel extends JPanel implements ActionListener {
         g.fillOval(ballX, ballY, unit, unit);
     }
 
-    protected void gameOver(Graphics g) {
+    private void gameWin(Graphics g) {
+
+        g.setColor(Color.RED);
+        g.setFont(new Font("Times New Roman", Font.BOLD, 30));
+        g.drawString("You Win!", 300, height / 2);
+        timer.stop();
+    }
+
+    private void gameOver(Graphics g) {
         g.setColor(Color.RED);
         g.setFont(new Font("Times New Roman", Font.BOLD, 30));
 
@@ -103,6 +143,7 @@ public class OperationPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (play) {
             moveBall();
+            brickCollision();
         }
         repaint();
     }
@@ -127,8 +168,6 @@ public class OperationPanel extends JPanel implements ActionListener {
         }
 
         Controller() {
-            setVisible(true);
-            setLocation(100, 150);
             setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setResizable(false);
@@ -143,6 +182,11 @@ public class OperationPanel extends JPanel implements ActionListener {
             add(panel);
 
             pack();
+
+            setVisible(true);
+            setLocation(100, 150);
+            setFocusable(true);
+            setFocusableWindowState(true);
 
             input.addKeyListener(new KeyAdapter() {
                 @Override
