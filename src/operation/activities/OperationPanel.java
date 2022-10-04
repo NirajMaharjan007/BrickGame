@@ -19,7 +19,7 @@ public class OperationPanel extends JPanel implements ActionListener {
 
     private int total_bricks = 21;
 
-    Timer timer = new Timer(1, this);
+    Timer timer = new Timer(8, this);
 
     Obstacle ob = new Obstacle(width, height);
 
